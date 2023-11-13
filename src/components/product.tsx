@@ -1,7 +1,7 @@
 import React from 'react'
 import NextImage, { type ImageProps as NextImageProps } from 'next/image'
 import Link, { type LinkProps } from 'next/link'
-import { tw } from '../utils/tw-merge'
+import { tw } from '@/utils/tw-merge'
 
 type ProductProps = LinkProps &
   React.HtmlHTMLAttributes<HTMLAnchorElement> & {

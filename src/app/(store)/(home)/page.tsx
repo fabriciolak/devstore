@@ -1,5 +1,5 @@
 import React from 'react'
-import { Product } from '@/app/components/product'
+import { Product } from '@/components/product'
 
 export default async function Home() {
   return (
