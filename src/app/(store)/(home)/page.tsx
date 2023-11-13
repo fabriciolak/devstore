@@ -1,49 +1,56 @@
 import React from 'react'
 import { Product } from '@/components/product'
+import { api } from '@/data/api'
+import { ProductType } from '@/data/types/product'
+
+async function getFeaturedProduct(): Promise<ProductType[]> {
+  const response = await api('/product/featured')
+  const products = await response.json()
+
+  return products
+}
 
 export default async function Home() {
+  const [highlightdProduct, ...products] = await getFeaturedProduct()
+
   return (
     <div className="grid max-h-[780px] grid-cols-9 grid-rows-6 gap-6">
-      <Product href="/">
+      <Product href={`/product/${highlightdProduct.slug}`}>
         <Product.Image
-          src="/camiseta-dowhile-2022.png"
-          alt="camiseta-dowhile-2022"
-          width={920}
-          height={920}
-        />
-
-        <Product.Info productName="Camiseta Dowhile 2022" productPrice={89} />
-      </Product>
-
-      <Product className="col-span-3 row-span-3" href="/">
-        <Product.Image
-          src="/moletom-ia-p-devs.png"
-          alt="moletom-ia-p-devs"
+          src={highlightdProduct.image}
+          alt={highlightdProduct.title}
           width={920}
           height={920}
         />
 
         <Product.Info
-          productName="Camiseta Dowhile 2022"
-          productPrice={129}
-          className="bottom-10 right-10"
+          productName={highlightdProduct.title}
+          productPrice={highlightdProduct.price}
         />
       </Product>
 
-      <Product className="col-span-3 row-span-3" href="/">
-        <Product.Image
-          src="/moletom-never-stop-learning.png"
-          alt="moletom-never-stop-learning"
-          width={920}
-          height={920}
-        />
+      {products.map((product) => {
+        return (
+          <Product
+            className="col-span-3 row-span-3"
+            href={`/product/${product.slug}`}
+            key={product.id}
+          >
+            <Product.Image
+              src={product.image}
+              alt={product.title}
+              width={920}
+              height={920}
+            />
 
-        <Product.Info
-          productName="Camiseta Dowhile 2022"
-          productPrice={129}
-          className="bottom-10 right-10"
-        />
-      </Product>
+            <Product.Info
+              productName={product.title}
+              productPrice={product.price}
+              className="bottom-10 right-10"
+            />
+          </Product>
+        )
+      })}
     </div>
   )
 }
