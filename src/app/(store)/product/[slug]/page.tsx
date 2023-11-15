@@ -1,40 +1,76 @@
 import Image from 'next/image'
+import { Metadata } from 'next'
+import { api } from '@/data/api'
+import { ProductType } from '@/data/types/product'
 
-interface pageProps {
+interface ProductProps {
   params: {
     slug: string
   }
 }
 
-export default function Product({ params }: pageProps) {
+async function getProduct(slug: string): Promise<ProductType> {
+  const response = await api(`/product/${slug}`, {
+    next: {
+      revalidate: 60 * 60 * 1, // 1 hour
+    },
+  })
+
+  const product = await response.json()
+
+  return product
+}
+
+export async function generateMetadata({
+  params,
+}: ProductProps): Promise<Metadata> {
+  const product = await getProduct(params.slug)
+
+  return {
+    title: product.title,
+  }
+}
+
+export default async function Product({ params }: ProductProps) {
+  const product = await getProduct(params.slug)
+
+  const priceWithCurrency = product.price.toLocaleString('pt-br', {
+    style: 'currency',
+    currency: 'BRL',
+    maximumFractionDigits: 0,
+  })
+
+  const installmentPrice = (product.price / 12).toLocaleString('pt-br', {
+    style: 'currency',
+    currency: 'BRL',
+  })
+
   return (
     <div className="relative grid max-h-[780px] grid-cols-3">
-      <div className="col-span-2 overflow-hidden flex items-baseline">
+      <div className="col-span-2 overflow-hidden flex items-baseline justify-center">
         <Image
-          src="/moletom-never-stop-learning.png"
-          alt={params.slug}
-          className=""
-          width={1019}
-          height={1019}
+          src={product.image}
+          alt={product.title}
+          className="object-cover"
+          width={1000}
+          height={1000}
           quality={100}
         />
       </div>
 
       <div className="flex flex-col justify-center px-12">
-        <h1 className="text-3xl font-bold leading-tight">
-          Camiseta Dowhile 2022
-        </h1>
+        <h1 className="text-3xl font-bold leading-tight">{product.title}</h1>
 
         <p className="mt-2 leading-relaxed text-zinc-400">
-          Camiseta fabricada com 100% de algodão.
+          {product.description}
         </p>
 
         <div className="mt-8 flex items-center gap-3">
           <span className="inline-block rounded-full bg-violet-500 hover:bg-violet-600 px-5 py-2.5 font-semibold">
-            69
+            {priceWithCurrency}
           </span>
           <span className="text-sm text-zinc-400">
-            Em 12x s/ juros de R$ 10,75
+            Em até 12x de {installmentPrice} sem juros
           </span>
         </div>
 

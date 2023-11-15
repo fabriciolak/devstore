@@ -54,7 +54,7 @@ function Info({ productName, productPrice, className }: InfoProps) {
       )}
     >
       <span className="text-sm truncate">{productName}</span>
-      <span className="flex h-full items-center justify-center rounded-full bg-violet-500 px-4 font-semibold">
+      <span className="flex h-full items-center justify-center rounded-full bg-violet-600 px-4 font-semibold">
         {productPrice.toLocaleString('pt-br', {
           style: 'currency',
           currency: 'BRL',

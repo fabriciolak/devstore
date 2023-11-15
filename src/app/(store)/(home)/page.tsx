@@ -2,24 +2,29 @@ import React from 'react'
 import { Product } from '@/components/product'
 import { api } from '@/data/api'
 import { ProductType } from '@/data/types/product'
+import { Metadata } from 'next'
 
 async function getFeaturedProduct(): Promise<ProductType[]> {
   const response = await api('/product/featured', {
     next: {
       revalidate: 60 * 60 * 1, // 1 hour
     },
-    cache: 'no-store',
   })
+
   const products = await response.json()
 
   return products
+}
+
+export const metadata: Metadata = {
+  title: 'Home',
 }
 
 export default async function Home() {
   const [highlightdProduct, ...products] = await getFeaturedProduct()
 
   return (
-    <div className="grid max-h-[780px] grid-cols-9 grid-rows-6 gap-6">
+    <main className="grid max-h-[780px] grid-cols-9 grid-rows-6 gap-6">
       <Product href={`/product/${highlightdProduct.slug}`}>
         <Product.Image
           src={highlightdProduct.image}
@@ -56,6 +61,6 @@ export default async function Home() {
           </Product>
         )
       })}
-    </div>
+    </main>
   )
 }
