@@ -2,11 +2,12 @@ import { api } from '@/data/api'
 import { ProductType } from '@/data/types/product'
 import { env } from '@/env'
 import { ImageResponse } from 'next/server'
-import { zinc } from 'tailwindcss/colors'
+import { zinc, violet } from 'tailwindcss/colors'
 
 export const runtime = 'edge'
 
-export const alt = 'About Acme'
+export const alt = 'Dev Store | Compre já'
+
 export const size = {
   width: 1200,
   height: 630,
@@ -30,6 +31,14 @@ export default async function Image({ params }: { params: { slug: string } }) {
 
   const productImageURL = new URL(product.image, env.APP_BASE_URL).toString()
 
+  const interBold = fetch(
+    new URL('@/fonts/Inter-Bold.ttf', import.meta.url),
+  ).then((res) => res.arrayBuffer())
+
+  const interMedium = fetch(
+    new URL('@/fonts/Inter-Medium.ttf', import.meta.url),
+  ).then((res) => res.arrayBuffer())
+
   return new ImageResponse(
     (
       <div
@@ -42,23 +51,67 @@ export default async function Image({ params }: { params: { slug: string } }) {
           alignItems: 'center',
         }}
       >
-        <img
-          src={productImageURL}
-          alt={product.description}
-          style={{ width: '720px' }}
-        />
         <div
           style={{
             display: 'flex',
-            flexDirection: 'column',
+            width: '720px',
+            justifyContent: 'center',
+          }}
+        >
+          <img
+            src={productImageURL}
+            alt={product.description}
+            style={{ width: '120%', marginTop: 64 }}
+          />
+        </div>
+
+        <div
+          style={{
             width: '480px',
+            display: 'flex',
+            flexDirection: 'column',
             padding: '0 32px',
           }}
         >
-          <h1 style={{ fontSize: 64, fontWeight: 700, color: zinc[100] }}>
+          <div
+            style={{
+              width: '150px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: violet[500],
+              padding: '8px',
+              borderRadius: '8px',
+            }}
+          >
+            <span
+              style={{
+                fontFamily: 'Inter Medium',
+                fontSize: 24,
+                fontWeight: 500,
+                color: zinc[300],
+              }}
+            >
+              Compre já
+            </span>
+          </div>
+          <h1
+            style={{
+              fontSize: 64,
+              fontWeight: 'bold',
+              color: zinc[100],
+            }}
+          >
             {product.title}
           </h1>
-          <span style={{ fontSize: 24, fontWeight: 500, color: zinc[300] }}>
+          <span
+            style={{
+              fontFamily: 'Inter Medium',
+              fontSize: 24,
+              fontWeight: 500,
+              color: zinc[300],
+            }}
+          >
             {product.price.toLocaleString('pt-br', {
               style: 'currency',
               currency: 'BRL',
@@ -66,6 +119,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
           </span>
           <span
             style={{
+              fontFamily: 'Inter Medium',
               fontSize: 16,
               fontWeight: 500,
               color: zinc[400],
@@ -77,5 +131,22 @@ export default async function Image({ params }: { params: { slug: string } }) {
         </div>
       </div>
     ),
+    {
+      ...size,
+      fonts: [
+        {
+          name: 'Inter Bold',
+          data: await interBold,
+          style: 'normal',
+          weight: 700,
+        },
+        {
+          name: 'Inter Medium',
+          data: await interMedium,
+          style: 'normal',
+          weight: 500,
+        },
+      ],
+    },
   )
 }
