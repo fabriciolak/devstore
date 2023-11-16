@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Search } from 'lucide-react'
 import { Cart } from './cart'
+import { Search } from './search'
 
 export function Header() {
   return (
@@ -11,20 +11,7 @@ export function Header() {
           Devstore
         </Link>
 
-        <form
-          aria-label="Buscar por produtos"
-          className="flex w-[320px] items-center gap-3 rounded-full bg-zinc-900 px-5 py-3 ring-zinc-700"
-        >
-          <Search aria-label="Lupa" className="w-5 h-5 text-zinc-500" />
-
-          <input
-            type="text"
-            role="searchbox"
-            aria-label="Buscar por produtos"
-            className="flex-1 bg-transparent text-sm outline-none placeholder:text-zinc-500"
-            placeholder="Buscar produtos..."
-          />
-        </form>
+        <Search />
       </div>
 
       <nav className="flex items-center gap-4">
