@@ -5,7 +5,7 @@ import { ProductType } from '@/data/types/product'
 import { Metadata } from 'next'
 
 async function getFeaturedProduct(): Promise<ProductType[]> {
-  const response = await api('/product/featured', {
+  const response = await api('/products/featured', {
     next: {
       revalidate: 60 * 60 * 1, // 1 hour
     },

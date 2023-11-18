@@ -11,7 +11,7 @@ interface ProductProps {
 }
 
 async function getProduct(slug: string): Promise<ProductType> {
-  const response = await api(`/product/${slug}`, {
+  const response = await api(`/products/${slug}`, {
     next: {
       revalidate: 60 * 60 * 1, // 1 hour
     },
@@ -23,7 +23,7 @@ async function getProduct(slug: string): Promise<ProductType> {
 }
 
 export async function generateStaticParams() {
-  const response = await api('/product/featured')
+  const response = await api('/products/featured')
   const produtcs: ProductType[] = await response.json()
 
   return produtcs.map((product) => {

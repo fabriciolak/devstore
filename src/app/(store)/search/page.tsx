@@ -4,7 +4,7 @@ import { ProductType } from '@/data/types/product'
 import { redirect } from 'next/navigation'
 
 async function getProduct(query: string): Promise<ProductType[]> {
-  const response = await api(`/product/search?q=${query}`, {
+  const response = await api(`/products/search?q=${query}`, {
     next: {
       revalidate: 60 * 60 * 1, // 1 hour
     },
@@ -36,7 +36,7 @@ export default async function Search({
       </p>
 
       <div className="grid grid-cols-3 gap-6">
-        {products.map((product, i) => {
+        {products.map((product, _) => {
           return (
             <div key={product.id}>
               <Product href={`/product/${product.slug}`}>
