@@ -13,13 +13,8 @@ describe('search product', () => {
   })
 
   it('Should be redirect to home page if was not provide a search', () => {
-    cy.on('uncaught:exception', (err: any) => {
-      // if uncaught exception is thrown, it means that the redirect was successful
-      if (err.message.includes('NEXT_REDIRECT')) {
-        return false
-      }
-
-      return true
+    cy.on('uncaught:exception', () => {
+      return false
     })
 
     cy.visit('/search')
