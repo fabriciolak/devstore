@@ -1,3 +1,4 @@
+import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Cart } from './cart'
@@ -11,7 +12,9 @@ export function Header() {
           Devstore
         </Link>
 
-        <Search />
+        <React.Suspense fallback={null}>
+          <Search />
+        </React.Suspense>
       </div>
 
       <nav className="flex items-center gap-4">
